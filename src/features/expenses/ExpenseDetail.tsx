@@ -4,6 +4,7 @@ import {Expense} from "../../models/expense";
 
 
 const ExpenseList: React.FC = () => {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [expenses, setExpenses] = useState<Expense[]>([]);
 
     useEffect(() => {
