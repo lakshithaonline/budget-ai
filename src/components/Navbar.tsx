@@ -32,7 +32,10 @@ const Navbar: React.FC<NavbarProps> = ({ toggleTheme }) => {
     const location = useLocation();
     const { currentTheme } = useTheme();
 
-    const handleThemeChange = (event: React.MouseEvent<HTMLElement>, newTheme: "light" | "dark") => {
+    const handleThemeChange = (
+        event: React.MouseEvent<HTMLElement>,
+        newTheme: "light" | "dark"
+    ) => {
         if (newTheme !== null) {
             toggleTheme();
         }
@@ -61,38 +64,56 @@ const Navbar: React.FC<NavbarProps> = ({ toggleTheme }) => {
                             textAlign: "left",
                             px: 3,
                             py: 1.5,
+                            margin: 1,
                             borderRadius: 2,
-                            bgcolor: location.pathname === item.path ? currentTheme.palette.primary : "inherit",
+                            color:
+                                currentTheme.palette.mode === 'dark'
+                                    ? currentTheme.palette.primary.contrastText
+                                    : currentTheme.palette.primary.main,
+                            bgcolor:
+                                location.pathname === item.path
+                                    ? currentTheme.palette.primary.main
+                                    : currentTheme.palette.mode === 'dark'
+                                        ? currentTheme.palette.text.disabled
+                                        : currentTheme.palette.secondary.main,
                             "&:hover": {
-                                bgcolor: currentTheme.palette.background.paper,
+                                bgcolor:
+                                    currentTheme.palette.mode === 'dark'
+                                        ? currentTheme.palette.action.hover
+                                        : currentTheme.palette.action.selected,
                             },
                         }}
                     >
                         <ListItemText
                             primary={item.label}
                             primaryTypographyProps={{
-                                color: location.pathname === item.path ? currentTheme.palette.text.secondary : currentTheme.palette.text.primary,
+                                color:
+                                    currentTheme.palette.mode === 'dark'
+                                        ? currentTheme.palette.primary.contrastText
+                                        : currentTheme.palette.primary.contrastText,
                             }}
                         />
                     </ListItemButton>
                 </ListItem>
+
+
+
             ))}
         </List>
     );
 
     return (
         <Box sx={{ display: 'flex' }}>
-            {/* Top AppBar */}
+            {/* Top Navigation Bar */}
             <AppBar
                 position="fixed"
                 sx={{
-                    bgcolor: currentTheme.palette.primary,
+                    bgcolor: "transparent",
                     zIndex: (theme) => theme.zIndex.drawer + 1,
-                    width: { sm: `calc(100% - ${DRAWER_WIDTH}px)` },
-                    ml: { sm: `${DRAWER_WIDTH}px` }
+                    boxShadow: "none",
                 }}
             >
-                <Toolbar>
+                <Toolbar sx={{ padding: '0 16px' }}>
                     <IconButton
                         color="inherit"
                         aria-label="open drawer"
@@ -102,27 +123,36 @@ const Navbar: React.FC<NavbarProps> = ({ toggleTheme }) => {
                     >
                         <MenuIcon />
                     </IconButton>
-
                     <Typography
-                        variant="h6"
+                        variant="h4"
                         component="div"
-                        sx={{ flexGrow: 1 }}
+                        sx={{
+                            flexGrow: 1,
+                            fontWeight: 700,
+                            textTransform: 'uppercase',
+                            color:
+                                currentTheme.palette.mode === 'dark'
+                                    ? currentTheme.palette.text.primary
+                                    : currentTheme.palette.primary.main,
+                        }}
                     >
-                        Budget Management
+                        Budget Ai
                     </Typography>
 
                     {/* Theme Toggle */}
                     <Tooltip title="Toggle Theme" arrow>
                         <ToggleButtonGroup
-                            value={currentTheme}
+                            value={currentTheme.palette.mode}
                             exclusive
                             onChange={handleThemeChange}
                             aria-label="theme toggle"
                             sx={{
                                 mr: 2,
-                                border: "1px solid",
-                                borderColor: currentTheme.palette.text.primary === "dark" ? "#444" : "#ccc",
                                 borderRadius: "50px",
+                                borderColor:
+                                    currentTheme.palette.mode === "dark"
+                                        ? currentTheme.palette.action.hover
+                                        : currentTheme.palette.divider,
                             }}
                         >
                             <ToggleButton
@@ -131,9 +161,22 @@ const Navbar: React.FC<NavbarProps> = ({ toggleTheme }) => {
                                 sx={{
                                     padding: "8px",
                                     borderRadius: "50px",
-                                    color: currentTheme.palette.text.primary,
+                                    backgroundColor:
+                                        currentTheme.palette.mode === "dark"
+                                            ? currentTheme.palette.primary.main
+                                            : currentTheme.palette.background.paper,
+                                    color:
+                                        currentTheme.palette.mode === "dark"
+                                            ? currentTheme.palette.text.primary
+                                            : currentTheme.palette.text.primary,
                                     '&.Mui-selected': {
-                                        backgroundColor: currentTheme.palette.background.paper,
+                                        backgroundColor: currentTheme.palette.action.selected,
+                                    },
+                                    '&:hover': {
+                                        backgroundColor:
+                                            currentTheme.palette.mode === "dark"
+                                                ? currentTheme.palette.action.hover
+                                                : currentTheme.palette.action.hover,
                                     },
                                 }}
                             >
@@ -145,9 +188,22 @@ const Navbar: React.FC<NavbarProps> = ({ toggleTheme }) => {
                                 sx={{
                                     padding: "8px",
                                     borderRadius: "50px",
-                                    color: currentTheme.palette.text.primary,
-                                    "&.Mui-selected": {
-                                        backgroundColor: currentTheme.palette.background.paper,
+                                    backgroundColor:
+                                        currentTheme.palette.mode === "light"
+                                            ? currentTheme.palette.text.primary
+                                            : currentTheme.palette.text.primary,
+                                    color:
+                                        currentTheme.palette.mode === "light"
+                                            ? currentTheme.palette.text.primary
+                                            : currentTheme.palette.text.primary,
+                                    '&.Mui-selected': {
+                                        backgroundColor: currentTheme.palette.action.selected,
+                                    },
+                                    '&:hover': {
+                                        backgroundColor:
+                                            currentTheme.palette.mode === "light"
+                                                ? currentTheme.palette.action.hover
+                                                : currentTheme.palette.action.hover,
                                     },
                                 }}
                             >
@@ -156,34 +212,72 @@ const Navbar: React.FC<NavbarProps> = ({ toggleTheme }) => {
                         </ToggleButtonGroup>
                     </Tooltip>
 
+
                     {/* Auth Buttons */}
                     {!user ? (
                         <Button
                             component={Link}
                             to="/sign-in"
-                            sx={{ color: currentTheme.palette.text.secondary }}
+                            sx={{
+                                color: currentTheme.palette.text.secondary,
+                                mx: 2,
+                                py: 1,
+                                borderRadius: 2,
+                                backgroundColor:
+                                    currentTheme.palette.mode === "dark"
+                                        ? currentTheme.palette.primary.main
+                                        : currentTheme.palette.primary.contrastText,
+                                "&:hover": {
+                                    backgroundColor:
+                                        currentTheme.palette.mode === "dark"
+                                            ? currentTheme.palette.primary.main
+                                            : currentTheme.palette.primary.contrastText,
+                                },
+                                "&:active": {
+                                    backgroundColor:
+                                        currentTheme.palette.mode === "dark"
+                                            ? currentTheme.palette.primary.main
+                                            : currentTheme.palette.primary.main,
+                                },
+                            }}
                         >
                             Login
                         </Button>
                     ) : (
                         <Button
                             onClick={logout}
-                            sx={{ color: currentTheme.palette.text.secondary }}
+                            sx={{
+                                color: currentTheme.palette.primary.contrastText,
+                                mx: 2,
+                                py: 1,
+                                borderRadius: 2,
+                                backgroundColor:
+                                    currentTheme.palette.mode === "dark"
+                                        ? currentTheme.palette.secondary.main // Use primary color for dark mode
+                                        : currentTheme.palette.primary.main, // Use contrastText for light mode
+                                "&:hover": {
+                                    backgroundColor:
+                                        currentTheme.palette.mode === "dark"
+                                            ? currentTheme.palette.secondary.main // Darker shade for hover in dark mode
+                                            : currentTheme.palette.secondary.main, // Lighter shade for hover in light mode
+                                },
+                                "&:active": {
+                                    backgroundColor:
+                                        currentTheme.palette.mode === "dark"
+                                            ? currentTheme.palette.primary.main
+                                            : currentTheme.palette.primary.main,
+                                },
+                            }}
                         >
                             Logout
                         </Button>
                     )}
+
                 </Toolbar>
             </AppBar>
 
             {/* Permanent Sidebar for Desktop / Temporary Drawer for Mobile */}
-            <Box
-                component="nav"
-                sx={{
-                    width: { sm: DRAWER_WIDTH },
-                    flexShrink: { sm: 0 }
-                }}
-            >
+            <Box component="nav" sx={{ width: { sm: DRAWER_WIDTH }, flexShrink: { sm: 0 } }}>
                 {/* Mobile Drawer */}
                 <Drawer
                     variant="temporary"
@@ -210,28 +304,23 @@ const Navbar: React.FC<NavbarProps> = ({ toggleTheme }) => {
                         "& .MuiDrawer-paper": {
                             boxSizing: "border-box",
                             width: DRAWER_WIDTH,
-                            bgcolor: currentTheme.palette.background.default,
+                            bgcolor:
+                                currentTheme.palette.mode === 'dark'
+                                    ? currentTheme.palette.background.paper
+                                    : currentTheme.palette.background.default,
+                            borderRight: `1px dashed ${currentTheme.palette.text.disabled}`,
                         },
                     }}
                     open
                 >
-                    <Toolbar /> {/* This creates space for the AppBar */}
+                    <Toolbar />
                     <NavigationList />
                 </Drawer>
             </Box>
 
             {/* Main Content Wrapper */}
-            <Box
-                component="main"
-                sx={{
-                    flexGrow: 1,
-                    p: 3,
-                    width: { sm: `calc(100% - ${DRAWER_WIDTH}px)` },
-                    ml: { sm: `${DRAWER_WIDTH}px` },
-                    mt: '64px', // Height of the AppBar
-                }}
-            >
-                {/* Your main content goes here */}
+            <Box component="main" sx={{ flexGrow: 1, p: 3, mt: '64px' }}>
+                {/* Main content goes here */}
             </Box>
         </Box>
     );
