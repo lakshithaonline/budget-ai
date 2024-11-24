@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { getExpenses } from "../../firebase/db";
-import {Expense} from "../../models/expense";
+import { Expense } from "../../models/expense";
 
 const BudgetOverview: React.FC = () => {
     const [expenses, setExpenses] = useState<Expense[]>([]);
@@ -35,6 +35,23 @@ const BudgetOverview: React.FC = () => {
             <p>Total Budget: {totalAmount} LKR</p>
             <p>Total Advance Paid: {totalAdvancePaid} LKR</p>
             <p>Remaining Balance: {remainingBalance} LKR</p>
+
+            <h3>Expenses</h3>
+            {expenses.length > 0 ? (
+                <ul>
+                    {expenses.map((expense) => (
+                        <li key={expense.id}>
+                            <p><strong>{expense.title}</strong></p>
+                            <p>Amount: {expense.amount} LKR</p>
+                            <p>Advance Paid: {expense.advancePaid} LKR</p>
+                            <p>Remaining: {expense.amount - expense.advancePaid} LKR</p>
+                            <p>Due Date: {expense.dueDate}</p>
+                        </li>
+                    ))}
+                </ul>
+            ) : (
+                <p>No expenses available</p>
+            )}
         </div>
     );
 };
