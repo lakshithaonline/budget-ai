@@ -61,17 +61,19 @@ const Navbar: React.FC<NavbarProps> = ({ toggleTheme }) => {
                             textAlign: "left",
                             px: 3,
                             py: 1.5,
-                            bgcolor: location.pathname === item.path ?
-                                (currentTheme === "dark" ? "rgba(255, 255, 255, 0.08)" : "#e0e0e0")
-                                : "inherit",
+                            borderRadius: 2,
+                            bgcolor: location.pathname === item.path ? currentTheme.palette.primary : "inherit",
                             "&:hover": {
-                                bgcolor: currentTheme === "dark" ?
-                                    "rgba(255, 255, 255, 0.12)"
-                                    : "#d7d7d7"
+                                bgcolor: currentTheme.palette.background.paper,
                             },
                         }}
                     >
-                        <ListItemText primary={item.label} />
+                        <ListItemText
+                            primary={item.label}
+                            primaryTypographyProps={{
+                                color: location.pathname === item.path ? currentTheme.palette.text.secondary : currentTheme.palette.text.primary,
+                            }}
+                        />
                     </ListItemButton>
                 </ListItem>
             ))}
@@ -84,7 +86,7 @@ const Navbar: React.FC<NavbarProps> = ({ toggleTheme }) => {
             <AppBar
                 position="fixed"
                 sx={{
-                    bgcolor: currentTheme.primary,
+                    bgcolor: currentTheme.palette.primary,
                     zIndex: (theme) => theme.zIndex.drawer + 1,
                     width: { sm: `calc(100% - ${DRAWER_WIDTH}px)` },
                     ml: { sm: `${DRAWER_WIDTH}px` }
@@ -119,7 +121,7 @@ const Navbar: React.FC<NavbarProps> = ({ toggleTheme }) => {
                             sx={{
                                 mr: 2,
                                 border: "1px solid",
-                                borderColor: currentTheme === "dark" ? "#444" : "#ccc",
+                                borderColor: currentTheme.palette.text.primary === "dark" ? "#444" : "#ccc",
                                 borderRadius: "50px",
                             }}
                         >
@@ -129,9 +131,9 @@ const Navbar: React.FC<NavbarProps> = ({ toggleTheme }) => {
                                 sx={{
                                     padding: "8px",
                                     borderRadius: "50px",
-                                    color: currentTheme === "dark" ? "#f5f5f5" : "#212121",
+                                    color: currentTheme.palette.text.primary,
                                     '&.Mui-selected': {
-                                        backgroundColor: currentTheme === "dark" ? "#424242" : "#f5f5f5",
+                                        backgroundColor: currentTheme.palette.background.paper,
                                     },
                                 }}
                             >
@@ -143,9 +145,9 @@ const Navbar: React.FC<NavbarProps> = ({ toggleTheme }) => {
                                 sx={{
                                     padding: "8px",
                                     borderRadius: "50px",
-                                    color: currentTheme === "dark" ? "#f5f5f5" : "#212121",
-                                    '&.Mui-selected': {
-                                        backgroundColor: currentTheme === "dark" ? "#f5f5f5" : "#424242",
+                                    color: currentTheme.palette.text.primary,
+                                    "&.Mui-selected": {
+                                        backgroundColor: currentTheme.palette.background.paper,
                                     },
                                 }}
                             >
@@ -159,14 +161,14 @@ const Navbar: React.FC<NavbarProps> = ({ toggleTheme }) => {
                         <Button
                             component={Link}
                             to="/sign-in"
-                            sx={{ color: "#fff" }}
+                            sx={{ color: currentTheme.palette.text.secondary }}
                         >
                             Login
                         </Button>
                     ) : (
                         <Button
                             onClick={logout}
-                            sx={{ color: "#fff" }}
+                            sx={{ color: currentTheme.palette.text.secondary }}
                         >
                             Logout
                         </Button>
@@ -193,7 +195,7 @@ const Navbar: React.FC<NavbarProps> = ({ toggleTheme }) => {
                         '& .MuiDrawer-paper': {
                             boxSizing: 'border-box',
                             width: DRAWER_WIDTH,
-                            bgcolor: currentTheme.background,
+                            bgcolor: currentTheme.palette.background.default,
                         },
                     }}
                 >
@@ -204,12 +206,11 @@ const Navbar: React.FC<NavbarProps> = ({ toggleTheme }) => {
                 <Drawer
                     variant="permanent"
                     sx={{
-                        display: { xs: 'none', sm: 'block' },
-                        '& .MuiDrawer-paper': {
-                            boxSizing: 'border-box',
+                        display: { xs: "none", sm: "block" },
+                        "& .MuiDrawer-paper": {
+                            boxSizing: "border-box",
                             width: DRAWER_WIDTH,
-                            bgcolor: currentTheme.background,
-                            borderRight: `1px solid ${currentTheme === "dark" ? "rgba(255, 255, 255, 0.12)" : "#e0e0e0"}`,
+                            bgcolor: currentTheme.palette.background.default,
                         },
                     }}
                     open

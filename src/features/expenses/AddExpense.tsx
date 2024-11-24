@@ -98,7 +98,7 @@ const AddExpense: React.FC = () => {
     };
 
     return (
-        <Box sx={{ backgroundColor: currentTheme.background, color: currentTheme.text, minHeight: "100vh", padding: 3 }}>
+        <Box sx={{ backgroundColor: currentTheme.palette.background.default, color: currentTheme.palette.text.primary, minHeight: "100vh", padding: 3 }}>
             <Typography variant="h4" gutterBottom>
                 Add Expense
             </Typography>
@@ -107,7 +107,7 @@ const AddExpense: React.FC = () => {
                 elevation={3}
                 sx={{
                     p: 3,
-                    bgcolor: currentTheme.surface,
+                    bgcolor: currentTheme.palette.background.paper,
                     maxWidth: 600,
                     mx: "auto",
                     borderRadius: 2,
@@ -124,7 +124,10 @@ const AddExpense: React.FC = () => {
                             helperText={errors.title ? "Title is required" : ""}
                             variant="outlined"
                             InputProps={{
-                                style: { color: currentTheme.text }
+                                style: { color: currentTheme.palette.text.primary, backgroundColor: currentTheme.palette.background.default },
+                            }}
+                            InputLabelProps={{
+                                style: { color: currentTheme.palette.text.secondary },
                             }}
                         />
                     </Grid>
@@ -139,8 +142,22 @@ const AddExpense: React.FC = () => {
                             error={errors.amount}
                             helperText={errors.amount ? "Valid amount is required" : ""}
                             InputProps={{
-                                startAdornment: <InputAdornment position="start">$</InputAdornment>,
-                                style: { color: currentTheme.text }
+                                startAdornment: (
+                                    <InputAdornment
+                                        position="start"
+                                        sx={{
+                                            color: currentTheme.palette.mode === 'dark'
+                                                ? currentTheme.palette.text.primary
+                                                : currentTheme.palette.text.secondary, // Adjust the color based on the theme
+                                        }}
+                                    >
+                                        LKR
+                                    </InputAdornment>
+                                ),
+                                style: { color: currentTheme.palette.text.primary, backgroundColor: currentTheme.palette.background.default },
+                            }}
+                            InputLabelProps={{
+                                style: { color: currentTheme.palette.text.secondary },
                             }}
                             variant="outlined"
                         />
@@ -156,8 +173,22 @@ const AddExpense: React.FC = () => {
                             error={errors.advancePaid}
                             helperText={errors.advancePaid ? "Invalid advance amount" : ""}
                             InputProps={{
-                                startAdornment: <InputAdornment position="start">$</InputAdornment>,
-                                style: { color: currentTheme.text }
+                                startAdornment: (
+                                    <InputAdornment
+                                        position="start"
+                                        sx={{
+                                            color: currentTheme.palette.mode === 'dark'
+                                                ? currentTheme.palette.text.primary
+                                                : currentTheme.palette.text.secondary,
+                                        }}
+                                    >
+                                        LKR
+                                    </InputAdornment>
+                                ),
+                                style: { color: currentTheme.palette.text.primary, backgroundColor: currentTheme.palette.background.default },
+                            }}
+                            InputLabelProps={{
+                                style: { color: currentTheme.palette.text.secondary },
                             }}
                             variant="outlined"
                         />
@@ -174,7 +205,10 @@ const AddExpense: React.FC = () => {
                             helperText={errors.dueDate ? "Due date is required" : ""}
                             InputLabelProps={{
                                 shrink: true,
-                                style: { color: currentTheme.text }
+                                style: { color: currentTheme.palette.text.secondary },
+                            }}
+                            InputProps={{
+                                style: { color: currentTheme.palette.text.primary, backgroundColor: currentTheme.palette.background.default },
                             }}
                             variant="outlined"
                         />
@@ -183,15 +217,22 @@ const AddExpense: React.FC = () => {
                     <Grid item xs={12}>
                         <Button
                             variant="contained"
-                            color="primary"
                             onClick={handleAddExpense}
                             fullWidth
                             size="large"
-                            sx={{ mt: 2 }}
+                            sx={{
+                                mt: 2,
+                                bgcolor: currentTheme.palette.primary.main,
+                                color: currentTheme.palette.primary.contrastText,
+                                '&:hover': {
+                                    bgcolor: currentTheme.palette.primary.main,
+                                },
+                            }}
                         >
                             Add Expense
                         </Button>
                     </Grid>
+
                 </Grid>
             </Paper>
 

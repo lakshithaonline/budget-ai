@@ -25,9 +25,9 @@ const AppWithTheme: React.FC = () => {
     return (
         <Box
             sx={{
-                display: 'flex',
-                backgroundColor: currentTheme.background,
-                color: currentTheme.text,
+                display: "flex",
+                backgroundColor: currentTheme.palette.background.default,
+                color: currentTheme.palette.text.primary,
                 minHeight: "100vh",
             }}
         >
@@ -39,9 +39,10 @@ const AppWithTheme: React.FC = () => {
                 sx={{
                     flexGrow: 1,
                     width: { sm: `calc(100% - 240px)` },
-                    bgcolor: currentTheme.background,
+                    bgcolor: currentTheme.palette.background.default,
+                    color: currentTheme.palette.text.primary,
                     p: 3,
-                    mt: '64px',
+                    mt: "64px",
                 }}
             >
                 <Routes>
