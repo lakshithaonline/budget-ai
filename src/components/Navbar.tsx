@@ -158,7 +158,7 @@ const Navbar: React.FC<NavbarProps> = ({ toggleTheme }) => {
                     {!user ? (
                         <Button
                             component={Link}
-                            to="/login"
+                            to="/sign-in"
                             sx={{ color: "#fff" }}
                         >
                             Login
